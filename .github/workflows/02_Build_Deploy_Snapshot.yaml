@@ -1,0 +1,25 @@
+name: "02 - Build & Deploy Snapshot on GKE"
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [closed]
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  build:
+    name: Build Snapshot
+    uses: Prabal-saxena/common-ci-cd-workflows/.github/workflows/build-deploy-snapshot.yaml@feature/build-deploy-snapshot
+    with:
+      APPLICATION_NAME: "product_service"
+      IMAGE_TAG: "0.0.1-SNAPSHOT"
+      ARTIFACTORY_URL: "us-central1-docker.pkg.dev/spheric-base-448422-q9"
+      ARTIFACTORY_NAMESPACE: "onlineliquorservicesartifactory"
+      PROJECT_ID: "spheric-base-448422-q9"
+      GKE_REGION: "GKE Region"
+      GKE_CLUSTER: "GKE Cluster"
+      GKE_NAMESPACE: "GKE Namespace"
+      POM_VERSION: "0.0.1-SNAPSHOT"
+    secrets: inherit
