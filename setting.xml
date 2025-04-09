@@ -1,11 +1,14 @@
 <settings>
     <localRepository>${user.home}/.m2/repository</localRepository>
-    <mirrors>
-        <mirror>
+    <repositories>
+        <repository>
             <id>central</id>
-            <mirrorOf>*</mirrorOf>
             <name>Maven Central</name>
             <url>https://repo.maven.apache.org/maven2</url>
-        </mirror>
-    </mirrors>
+            <layout>default</layout>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </settings>
