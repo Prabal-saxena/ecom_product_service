@@ -1,9 +1,6 @@
 # Use a lightweight OpenJDK image as base
 FROM openjdk:17-jdk-slim
 
-# Set the working directory in the container
-WORKDIR /app
-
 # Copy the JAR file into the container
 ARG JAR_FILE=target/product_service-0.0.1-SNAPSHOT.jar
 COPY ${JAR_FILE} app.jar
