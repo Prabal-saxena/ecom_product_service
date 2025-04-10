@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the JAR file into the container
-ARG JAR_FILE=target/*.jar
+ARG JAR_FILE=target/product_service-0.0.1-SNAPSHOT.jar
 COPY ${JAR_FILE} app.jar
 
 # Expose the port your app runs on (e.g., 8080)
