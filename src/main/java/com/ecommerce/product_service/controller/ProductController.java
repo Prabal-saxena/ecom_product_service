@@ -6,6 +6,8 @@ import java.util.Optional;
 import com.ecommerce.product_service.dto.ProductRequest;
 import com.ecommerce.product_service.dto.ProductResponse;
 import com.ecommerce.product_service.model.Product;
+import com.ecommerce.product_service.pagination.Page;
+import com.ecommerce.product_service.pagination.Pageable;
 import com.ecommerce.product_service.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +27,23 @@ public class ProductController {
         productService.createProduct(productRequest);
     }
 
+//    @GetMapping
+//    @ResponseStatus(HttpStatus.OK)
+//    @CrossOrigin(origins = "http://localhost:63342") // Allow requests from this origin
+//    public List<ProductResponse> getProduct(){
+//        return productService.getAllProducts();
+//    }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    @CrossOrigin(origins = "http://localhost:63342") // Allow requests from this origin
-    public List<ProductResponse> getProduct(){
-        return productService.getAllProducts();
+//    @CrossOrigin(origins = "http://localhost:63342") // Allow requests from this origin
+    public Page<Product> getPaginatedProducts(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size
+    ){
+        System.out.println("Received request for products - Page: " + page + ", Size: " + size);
+        Pageable pageable = Pageable.of(page, size);
+        return productService.getProductPaginated(pageable);
     }
 
     @PutMapping
