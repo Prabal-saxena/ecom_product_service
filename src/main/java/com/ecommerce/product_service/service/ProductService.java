@@ -3,11 +3,14 @@ package com.ecommerce.product_service.service;
 import com.ecommerce.product_service.dto.ProductRequest;
 import com.ecommerce.product_service.dto.ProductResponse;
 import com.ecommerce.product_service.model.Product;
+import com.ecommerce.product_service.pagination.Page;
+import com.ecommerce.product_service.pagination.Pageable;
 import com.ecommerce.product_service.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,4 +73,7 @@ public class ProductService {
                 .build();
     }
 
+    public Page<Product> getProductPaginated(Pageable pageable){
+        return productRepository.findAll(pageable);
+    }
 }
