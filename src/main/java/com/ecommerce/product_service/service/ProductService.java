@@ -2,15 +2,20 @@ package com.ecommerce.product_service.service;
 
 import com.ecommerce.product_service.dto.ProductRequest;
 import com.ecommerce.product_service.dto.ProductResponse;
+import com.ecommerce.product_service.model.Category;
 import com.ecommerce.product_service.model.Product;
+import com.ecommerce.product_service.model.SubCategory;
 import com.ecommerce.product_service.pagination.Page;
 import com.ecommerce.product_service.pagination.Pageable;
+import com.ecommerce.product_service.repository.CategoryRepository;
 import com.ecommerce.product_service.repository.ProductRepository;
+import com.ecommerce.product_service.repository.SubCategoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,20 +25,34 @@ import java.util.Optional;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+    private final SubCategoryRepository subCategoryRepository;
     public void createProduct(ProductRequest productRequest){
         Product product = Product.builder()
                 .name(productRequest.getName())
                 .description(productRequest.getDescription())
                 .price(productRequest.getPrice())
                 .imageUrl(productRequest.getImageUrl())
+                .category(Category.builder().categoryId(productRequest.getCategoryId()).build())
+                .subCategory(SubCategory.builder().subCategoryId(productRequest.getSubCategoryId()).build())
+                .quantity(productRequest.getQuantity())
+                .rating(productRequest.getRating())
+                .country(productRequest.getCountry())
+                .type(productRequest.getType())
+                .alcoholVol(productRequest.getAlcoholVol())
+                .creator(productRequest.getCreator())
+                .tags(productRequest.getTags())
                 .build();
+
+        Category cat = categoryRepository.findById(product.getCategory().getCategoryId())
+                .orElseThrow(() -> new RuntimeException(("CategoryId not Found")));
+        SubCategory subCat = subCategoryRepository.findById(product.getSubCategory().getSubCategoryId())
+                .orElseThrow(() -> new RuntimeException("SubCategory not found."));
+
+        product.setCategory(cat);
+        product.setSubCategory(subCat);
         productRepository.save(product);
         log.info("Product {} is saved", product.getId());
-    }
-
-    public List<ProductResponse> getAllProducts() {
-        List<Product> products = productRepository.findAll();
-        return products.stream().map(product -> mapToProductResponse(product)).toList();
     }
 
     public Optional<Product> updateProduct(ProductRequest productRequest){
@@ -63,17 +82,69 @@ public class ProductService {
 
     }
 
-    private ProductResponse mapToProductResponse(Product product) {
-        return ProductResponse.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .description(product.getDescription())
-                .price(product.getPrice())
-                .imageUrl(product.getImageUrl())
-                .build();
+    public Page<ProductResponse> getProductPaginated(Pageable pageable, String categoryId, String subCategoryId){
+        Page<Product> paginatedProducts = null;
+        List<ProductResponse> productResponses;
+
+        try {
+            if (categoryId != null && !categoryId.isEmpty()) {
+                if (subCategoryId != null && !subCategoryId.isEmpty()) {
+                    paginatedProducts = paginationProcess(productRepository.findByCategory_categoryIdAndSubCategory_subCategoryId(categoryId, subCategoryId), pageable);
+                }else {
+                    paginatedProducts = paginationProcess(productRepository.findByCategory_categoryId(categoryId), pageable);
+                }
+            } else {
+                paginatedProducts = paginationProcess(productRepository.findAll(), pageable);
+            }
+        }catch (Exception ex){System.out.println(ex.getMessage());}
+
+        if (paginatedProducts != null || paginatedProducts.getContent() != null || paginatedProducts.getNumber() != 0 || paginatedProducts.getTotalPages() !=0){
+            productResponses = mappingProductResponse(paginatedProducts);
+            return new com.ecommerce.product_service.dto.PageImpl<>(productResponses, pageable, paginatedProducts.getTotalElements());
+        }else {
+            return new com.ecommerce.product_service.dto.PageImpl<>(Collections.emptyList(), pageable, paginatedProducts.getTotalElements());
+        }
     }
 
-    public Page<Product> getProductPaginated(Pageable pageable){
-        return productRepository.findAll(pageable);
+    private Page<Product> paginationProcess(List<Product> allProducts, Pageable pageable){
+
+        int totalElements = allProducts.size();
+        int pageSize = pageable.getPageSize();
+        int pageNumber = pageable.getPageNumber();
+
+        int start = pageNumber * pageSize;
+        int end = Math.min(start + pageSize, totalElements);
+
+        if(start > totalElements){
+            return new com.ecommerce.product_service.dto.PageImpl<>(Collections.emptyList(), pageable, totalElements);
+        }
+
+        return new com.ecommerce.product_service.dto.PageImpl<>(allProducts.subList(start, end), pageable, totalElements);
+    }
+
+    private List<ProductResponse> mappingProductResponse(Page<Product> paginatedProducts){
+        List<ProductResponse> productResponses = new ArrayList<>();
+        for (Product p: paginatedProducts.getContent()) {
+            ProductResponse productResponse = new ProductResponse();
+            productResponse.setId(p.getId());
+            productResponse.setName(p.getName());
+            productResponse.setDescription(p.getDescription());
+            productResponse.setPrice(p.getPrice());
+            productResponse.setImageUrl(p.getImageUrl());
+            productResponse.setCategory(p.getCategory().getCategory());
+            productResponse.setSubCategory(p.getSubCategory().getSubCategory());
+            productResponse.setQuantity(p.getQuantity());
+            productResponse.setRating(p.getRating());
+            productResponse.setCountry(p.getCountry());
+            productResponse.setType(p.getType());
+            productResponse.setAlcoholVol(p.getAlcoholVol());
+            productResponse.setCreator(p.getCreator());
+            if (!p.getTags().isEmpty()) {
+                productResponse.setTags(p.getTags());
+            }
+
+            productResponses.add(productResponse);
+        }
+        return productResponses;
     }
 }

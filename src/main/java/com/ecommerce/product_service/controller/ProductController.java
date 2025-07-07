@@ -27,23 +27,17 @@ public class ProductController {
         productService.createProduct(productRequest);
     }
 
-//    @GetMapping
-//    @ResponseStatus(HttpStatus.OK)
-//    @CrossOrigin(origins = "http://localhost:63342") // Allow requests from this origin
-//    public List<ProductResponse> getProduct(){
-//        return productService.getAllProducts();
-//    }
-
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-//    @CrossOrigin(origins = "http://localhost:63342") // Allow requests from this origin
-    public Page<Product> getPaginatedProducts(
+    public Page<ProductResponse> getPaginatedProducts(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String subCategory,
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size
+            @RequestParam(value = "size", defaultValue = "6") int size
     ){
         System.out.println("Received request for products - Page: " + page + ", Size: " + size);
         Pageable pageable = Pageable.of(page, size);
-        return productService.getProductPaginated(pageable);
+        return productService.getProductPaginated(pageable, category, subCategory);
     }
 
     @PutMapping
