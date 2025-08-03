@@ -14,10 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -104,6 +101,16 @@ public class ProductService {
         }else {
             return new com.ecommerce.product_service.dto.PageImpl<>(Collections.emptyList(), pageable, paginatedProducts.getTotalElements());
         }
+    }
+
+    public List<Product> getProductsByIds(List<String> productIds){
+        return productRepository.findAllById(productIds);
+    }
+
+    public Product getProductByProductId(String productId){
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new NoSuchElementException("Couldn't find the product with productId: " + productId));
+        return product;
     }
 
     private Page<Product> paginationProcess(List<Product> allProducts, Pageable pageable){

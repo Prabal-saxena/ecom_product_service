@@ -40,6 +40,18 @@ public class ProductController {
         return productService.getProductPaginated(pageable, category, subCategory);
     }
 
+    @GetMapping("/id")
+    @ResponseStatus(HttpStatus.OK)
+    public Product getProduct(@RequestParam String productId){
+        System.out.println("Product Enquiry for: " + productId);
+        return productService.getProductByProductId(productId);
+    }
+
+    @PostMapping("/byIds")
+    public List<Product> getProductsByIds(@RequestBody List<String> productIds){
+        return productService.getProductsByIds(productIds);
+    }
+
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public Optional<Product> updateProduct(@RequestBody ProductRequest productRequest){
