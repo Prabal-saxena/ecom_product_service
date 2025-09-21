@@ -11,7 +11,7 @@ permissions:
 jobs:
   build:
     name: Build Snapshot
-    uses: Prabal-saxena/common-ci-cd-workflows/.github/workflows/build-deploy-snapshot.yaml@feature/build-deploy-snapshot
+    uses: Prabal-saxena/common-ci-cd-workflows/.github/workflows/build-deploy-snapshot.yaml@feature/helm_pkg_repo_deploy_gke
     with:
       APPLICATION_NAME: "product_service"
       IMAGE_TAG: "product_service_0.0.1-SNAPSHOT"
