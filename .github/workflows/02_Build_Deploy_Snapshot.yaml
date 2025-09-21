@@ -11,15 +11,15 @@ permissions:
 jobs:
   build:
     name: Build Snapshot
-    uses: Prabal-saxena/common-ci-cd-workflows/.github/workflows/build-deploy-snapshot.yaml@feature/build-deploy-snapshot
+    uses: Prabal-saxena/common-ci-cd-workflows/.github/workflows/build-deploy-snapshot.yaml@feature/helm_pkg_repo_deploy_gke
     with:
       APPLICATION_NAME: "product_service"
-      IMAGE_TAG: "0.0.1-SNAPSHOT"
-      ARTIFACTORY_URL: "us-central1-docker.pkg.dev/spheric-base-448422-q9"
+      IMAGE_TAG: "product_service_0.0.1-SNAPSHOT"
+      ARTIFACTORY_URL: "us-central1-docker.pkg.dev/noble-linker-471623-s6"
       ARTIFACTORY_NAMESPACE: "onlineliquorservicesartifactory"
-      PROJECT_ID: "spheric-base-448422-q9"
-      GKE_REGION: "GKE Region"
-      GKE_CLUSTER: "GKE Cluster"
+      PROJECT_ID: "noble-linker-471623-s6"
+      GKE_REGION: "us-central1"
+      GKE_CLUSTER: "private-gke-cluster"
       GKE_NAMESPACE: "GKE Namespace"
       POM_VERSION: "0.0.1-SNAPSHOT"
     secrets: inherit
