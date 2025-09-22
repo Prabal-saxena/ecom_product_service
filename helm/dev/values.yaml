@@ -8,6 +8,7 @@ log: "stdout"
 app_name: "product_service"
 version: 0.0.1
 env: "dev"
+release: "product-service"
 
 # Service Values
 serviceName: "product_service"
