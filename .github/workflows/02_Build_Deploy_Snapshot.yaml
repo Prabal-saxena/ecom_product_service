@@ -14,6 +14,7 @@ jobs:
     uses: Prabal-saxena/common-ci-cd-workflows/.github/workflows/build-deploy-snapshot.yaml@feature/helm_pkg_repo_deploy_gke
     with:
       APPLICATION_NAME: "product_service"
+      RELEASE: "product-service"
       IMAGE_TAG: ""
       ARTIFACTORY_URL: "us-central1-docker.pkg.dev/noble-linker-471623-s6"
       ARTIFACTORY_NAMESPACE: "onlineliquorservicesartifactory"
