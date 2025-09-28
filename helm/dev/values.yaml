@@ -16,6 +16,8 @@ serviceName: "product-service"
 # ServiceAccount
 ksaServiceAccount: product-service-sa
 gcpServiceAccount: product-service-sa@noble-linker-471623-s6.iam.gserviceaccount.com
+cicdKsaServiceAccount: ci-cd-sa
+cicdGcpServiceAccount: ci-cd-sa@noble-linker-471623-s6.iam.gserviceaccount.com
 
 datasource:
   username:
