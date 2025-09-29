@@ -1,20 +1,23 @@
 enabled: true
-deploymentName: "product_service"
-namespace: "app"
-containerName: "product_service"
+deploymentName: "product-service"
+namespace: "app-microservices"
+containerName: "product-service"
 distributed_tracing_enabled: "true"
 log_level: "info"
 log: "stdout"
-app_name: "product_service"
+app_name: "product-service"
 version: 0.0.1
 env: "dev"
+release: "product-service"
 
 # Service Values
-serviceName: "product_service"
+serviceName: "product-service"
 
 # ServiceAccount
 ksaServiceAccount: product-service-sa
 gcpServiceAccount: product-service-sa@noble-linker-471623-s6.iam.gserviceaccount.com
+cicdKsaServiceAccount: ci-cd-sa
+cicdGcpServiceAccount: ci-cd-sa@noble-linker-471623-s6.iam.gserviceaccount.com
 
 datasource:
   username:
@@ -27,7 +30,7 @@ autoscaling:
 
 # App image details (replaced by helm)
 image:
-  repository: "onlineliquorservicesartifactory"
+  repository: "us-central1-docker.pkg.dev/noble-linker-471623-s6/onlineliquorservicesartifactory/product_service"
   pullPolicy: IfNotPresent
   tag: ""
 
