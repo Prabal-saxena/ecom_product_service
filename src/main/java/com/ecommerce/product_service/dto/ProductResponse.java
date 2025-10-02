@@ -1,13 +1,10 @@
 package com.ecommerce.product_service.dto;
 
-import com.ecommerce.product_service.model.Category;
-import com.ecommerce.product_service.model.SubCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.math.BigDecimal;
 import java.util.List;

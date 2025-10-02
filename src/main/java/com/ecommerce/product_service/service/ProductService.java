@@ -30,8 +30,6 @@ public class ProductService {
                 .description(productRequest.getDescription())
                 .price(productRequest.getPrice())
                 .imageUrl(productRequest.getImageUrl())
-                .category(Category.builder().categoryId(productRequest.getCategoryId()).build())
-                .subCategory(SubCategory.builder().subCategoryId(productRequest.getSubCategoryId()).build())
                 .quantity(productRequest.getQuantity())
                 .rating(productRequest.getRating())
                 .country(productRequest.getCountry())
@@ -41,13 +39,13 @@ public class ProductService {
                 .tags(productRequest.getTags())
                 .build();
 
-        Category cat = categoryRepository.findById(product.getCategory().getCategoryId())
+        Category cat = categoryRepository.findById(productRequest.getCategoryId())
                 .orElseThrow(() -> new RuntimeException(("CategoryId not Found")));
-        SubCategory subCat = subCategoryRepository.findById(product.getSubCategory().getSubCategoryId())
-                .orElseThrow(() -> new RuntimeException("SubCategory not found."));
+        SubCategory subCat = subCategoryRepository.findById(productRequest.getSubCategoryId())
+                .orElseThrow(() -> new RuntimeException("SubCategoryId not found."));
 
-        product.setCategory(cat);
-        product.setSubCategory(subCat);
+        product.setCategoryId(cat.getCategoryId());
+        product.setSubCategoryId(subCat.getCategoryId());
         productRepository.save(product);
         log.info("Product {} is saved", product.getId());
     }
@@ -86,9 +84,9 @@ public class ProductService {
         try {
             if (categoryId != null && !categoryId.isEmpty()) {
                 if (subCategoryId != null && !subCategoryId.isEmpty()) {
-                    paginatedProducts = paginationProcess(productRepository.findByCategory_categoryIdAndSubCategory_subCategoryId(categoryId, subCategoryId), pageable);
+                    paginatedProducts = paginationProcess(productRepository.findByCategoryIdAndSubCategoryId(categoryId, subCategoryId), pageable);
                 }else {
-                    paginatedProducts = paginationProcess(productRepository.findByCategory_categoryId(categoryId), pageable);
+                    paginatedProducts = paginationProcess(productRepository.findByCategoryId(categoryId), pageable);
                 }
             } else {
                 paginatedProducts = paginationProcess(productRepository.findAll(), pageable);
@@ -131,6 +129,8 @@ public class ProductService {
 
     private List<ProductResponse> mappingProductResponse(Page<Product> paginatedProducts){
         List<ProductResponse> productResponses = new ArrayList<>();
+        List<Category> categoryList = categoryRepository.findAll();
+        List<SubCategory> subCategoryList = subCategoryRepository.findAll();
         for (Product p: paginatedProducts.getContent()) {
             ProductResponse productResponse = new ProductResponse();
             productResponse.setId(p.getId());
@@ -138,8 +138,8 @@ public class ProductService {
             productResponse.setDescription(p.getDescription());
             productResponse.setPrice(p.getPrice());
             productResponse.setImageUrl(p.getImageUrl());
-            productResponse.setCategory(p.getCategory().getCategory());
-            productResponse.setSubCategory(p.getSubCategory().getSubCategory());
+            productResponse.setCategory(String.valueOf(categoryList.stream().filter(x-> x.getCategoryId().equals(p.getCategoryId()))));
+            productResponse.setSubCategory(String.valueOf(subCategoryList.stream().filter(x-> x.getSubCategoryId().equals(p.getSubCategoryId()))));
             productResponse.setQuantity(p.getQuantity());
             productResponse.setRating(p.getRating());
             productResponse.setCountry(p.getCountry());

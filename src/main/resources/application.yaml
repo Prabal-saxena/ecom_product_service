@@ -2,9 +2,20 @@ spring:
   application:
     name: product-service
 
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017/product-service
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/liquorservices?currentSchema=product_service"
+    username: "postgres"
+    password: "admin"
+
+  jpa:
+    properties:
+      hibernate:
+        default_schema: "product_service"
+        dialect: "org.hibernate.dialect.PostgreSQLDialect"
+    hibernate:
+      ddl-auto: "update"
+    show-sql: "true"
+    format-sql: "true"
 
 server:
   port: 8081
