@@ -26,7 +26,7 @@ public class CategoryService {
 
         for (Category c: categoryList) {
             System.out.println(c.getCategoryId());
-            List<SubCategory> subCategoryList = subCategoryRepository.findByCategoryId_CategoryId(c.getCategoryId());
+            List<SubCategory> subCategoryList = subCategoryRepository.findByCategoryId(c.getCategoryId());
             CategoryResponse categoryResponse = CategoryResponse.builder()
                     .categoryId(c.getCategoryId())
                     .category(c.getCategory())

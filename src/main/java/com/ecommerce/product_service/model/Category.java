@@ -1,19 +1,24 @@
 package com.ecommerce.product_service.model;
 
+import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Data
-@Document(value = "category")
+@Table(name = "t_category", schema = "product_service")
 public class Category {
 
     @Id
     private String categoryId;
+    @Column(nullable = false)
     private String category;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<SubCategory> subCategoryList;
 }
