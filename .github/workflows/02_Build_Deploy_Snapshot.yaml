@@ -11,7 +11,7 @@ permissions:
 jobs:
   build:
     name: Build Snapshot
-    uses: Prabal-saxena/common-ci-cd-workflows/.github/workflows/build-deploy-snapshot.yaml@origin/main
+    uses: Prabal-saxena/common-ci-cd-workflows/.github/workflows/build-deploy-snapshot.yaml@main
     with:
       APPLICATION_NAME: "product_service"
       RELEASE: "product-service"
