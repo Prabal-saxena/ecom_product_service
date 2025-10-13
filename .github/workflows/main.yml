@@ -1,6 +1,11 @@
 name: Force Cleanup All Artifacts
 on:
   workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
+
 jobs:
   cleanup:
     runs-on: ubuntu-latest
