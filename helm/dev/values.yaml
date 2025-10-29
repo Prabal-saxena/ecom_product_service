@@ -54,7 +54,7 @@ service:
   type: LoadBalancer
   portName: http
   port: 80
-  TargetPort: 8080
+  TargetPort: 8081
   annotations:
     networking.gke.io/internal-load-balancer-allow-global-access: "true"
     networking.gkr.io/load-balancer-type: "Internal"

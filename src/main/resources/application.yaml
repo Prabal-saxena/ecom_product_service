@@ -18,5 +18,14 @@ spring:
     show-sql: "true"
     format-sql: "true"
 
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health,info,liveness,readiness
+
 server:
   port: 8081
