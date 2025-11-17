@@ -1,5 +1,5 @@
 # Use a lightweight OpenJDK image as base
-FROM openjdk:17-jdk-slim-bullseye
+FROM openjdk:17-jdk-bullseye
 
 # Copy the JAR file into the container
 ARG JAR_FILE=target/product_service-0.0.1-SNAPSHOT.jar
